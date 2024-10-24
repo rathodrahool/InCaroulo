@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Verify Your Email</title>
+        <style>
+            body {
+                font-family: 'Segoe UI', 'Roboto', 'Helvetica', sans-serif;
+                line-height: 1.6;
+                color: #333;
+                background-color: #f6f6f6;
+                margin: 0;
+                padding: 0;
+            }
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+            .container {
+                max-width: 600px;
+                margin: 40px auto;
+                background-color: #ffffff;
+                border-radius: 8px;
+                overflow: hidden;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            }
+            .header {
+                background-color: #1a1a1a;
+                padding: 30px 0;
+                text-align: center;
+                position: relative;
+            }
+            .header td {
+                padding: 0;
+            }
+            .header td::after {
+                content: '';
+                display: block;
+                height: 5px;
+                background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
+            }
+            .header h1 {
+                color: #ffffff;
+                font-size: 28px;
+                margin: 0;
+                letter-spacing: 1px;
+            }
+            .content {
+                padding: 40px;
+                text-align: center;
+            }
+            .otp-container {
+                text-align: center;
+                background-color: #f9f9f9;
+                border-radius: 8px;
+                padding: 25px;
+                margin: 30px 0;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+                position: relative;
+            }
+            .otp-container td {
+                padding: 0;
+            }
+            .otp-container::before {
+                content: 'OTP';
+                position: absolute;
+                top: -10px;
+                left: 20px;
+                background-color: #1a1a1a;
+                color: #ffffff;
+                padding: 2px 10px;
+                font-size: 12px;
+                border-radius: 4px;
+            }
+            .otp-code {
+                font-size: 36px;
+                font-weight: bold;
+                letter-spacing: 8px;
+                color: #1a1a1a;
+                margin: 10px 0;
+                text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+            }
+            .timer {
+                font-size: 14px;
+                color: #666;
+                margin-top: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .timer::before {
+                content: '⏱️';
+                margin-right: 5px;
+            }
+            a {
+                color: white;
+            }
+            .button {
+                display: inline-block;
+                padding: 12px 30px;
+                background-color: #1a1a1a;
+                color: #ffffff;
+                text-decoration: none;
+                border-radius: 25px;
+                font-weight: bold;
+                font-size: 16px;
+                margin-top: 30px;
+                transition: all 0.3s ease;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+            .button:hover {
+                background-color: #000000;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+            .footer {
+                background-color: #f4f4f4;
+                padding: 20px;
+                text-align: center;
+                font-size: 12px;
+                color: #666;
+            }
+            .divider {
+                height: 1px;
+                background: black;
+                margin: 30px 0;
+                border: none;
+            }
+            p {
+                color: #555;
+                font-size: 16px;
+                line-height: 1.8;
+                margin-bottom: 20px;
+            }
+            .icon {
+                font-size: 24px;
+                margin-bottom: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <table class="container">
+            <tr>
+                <td class="header">
+                    <h1>Verify Your Email</h1>
+                </td>
+            </tr>
+            <tr>
+                <td class="content">
+                    <div class="icon">✉️</div>
+                    <p>
+                        Welcome ! To ensure the security of your account, please use the following One-Time Password
+                        (OTP) to complete your email verification:
+                    </p>
+                    <table class="otp-container">
+                        <tr>
+                            <td class="otp-code"><%= otp %></td>
+                        </tr>
+                        <tr>
+                            <td class="timer">Valid for <%= expireAt %> minutes</td>
+                        </tr>
+                    </table>
+                    <p>
+                        Enter this code on our website to activate your account and unlock full access to our services.
+                    </p>
+                    <hr class="divider" />
+                    <p>
+                        If you didn't request this code, please disregard this email. Your account security is our top
+                        priority.
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td class="footer">
+                    &copy; 2024 Your Company Name. All rights reserved.<br />
+                    This is an automated message, please do not reply.
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

@@ -1,0 +1,139 @@
+<html lang='en'>
+    <head>
+        <meta charset='UTF-8' />
+        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+        <title>{{title}}</title>
+        <script src='https://cdn.tailwindcss.com'></script>
+        <style>
+            /* Additional styles for better UI/UX */
+        </style>
+    </head>
+    <body class='bg-gray-100'>
+        <div class='flex items-center justify-center min-h-screen bg-gray-100'>
+            <div class='bg-white p-8 rounded-lg shadow-lg w-full max-w-md'>
+                <h2 class='text-2xl font-semibold text-gray-700 text-center mb-6'>
+                    Create Your Account
+                </h2>
+
+                <!-- Signup Form -->
+                <form action='signup' method='POST'>
+                    <!-- Full Name -->
+                    <div class='mb-4'>
+                        <label class='block text-gray-600 font-semibold mb-2' for='name'>Full Name</label>
+                        <input
+                            type='text'
+                            id='name'
+                            name='full_name'
+                            class='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400'
+                            placeholder='Enter your full name'
+                            required
+                        />
+                    </div>
+
+                    <!-- Email Address -->
+                    <div class='mb-4'>
+                        <label class='block text-gray-600 font-semibold mb-2' for='email'>Email Address</label>
+                        <input
+                            type='email'
+                            id='email'
+                            name='email'
+                            class='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400'
+                            placeholder='Enter your email'
+                            required
+                        />
+                    </div>
+
+                    <!-- Password -->
+                    <div class='mb-4'>
+                        <label class='block text-gray-600 font-semibold mb-2' for='password'>Password</label>
+                        <div class='relative'>
+                            <input
+                                type='password'
+                                id='password'
+                                name='password'
+                                class='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 pr-10'
+                                placeholder='Enter your password'
+                                required
+                            />
+                            <button
+                                type='button'
+                                class='absolute inset-y-0 right-3 flex items-center text-gray-600'
+                                onclick='togglePasswordVisibility()'
+                            >
+                                <span id='password-icon'>Show</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class='mb-6'>
+                        <label class='block text-gray-600 font-semibold mb-2' for='confirm-password'>Confirm Password</label>
+                        <div class='relative'>
+                            <input
+                                type='password'
+                                id='confirm-password'
+                                name='confirm_password'
+                                class='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 pr-10'
+                                placeholder='Confirm your password'
+                                required
+                            />
+                            <button
+                                type='button'
+                                class='absolute inset-y-0 right-3 flex items-center text-gray-600'
+                                onclick='toggleConfirmPasswordVisibility()'
+                            >
+                                <span id='confirm-password-icon'>Show</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Sign Up Button -->
+                    <div>
+                        <button
+                            type='submit'
+                            class='w-full bg-green-500 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-green-600 transition duration-300'
+                        >
+                            Sign Up
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Already have an account -->
+                <p class='text-center text-gray-600 mt-6'>
+                    Already have an account?
+                    <a href='login' class='text-blue-600 hover:underline'>Log In</a>
+                </p>
+
+                <!-- Success Message Section -->
+                {{#if success}}
+                    <div class='success-container bg-green-100 text-green-700 p-4 rounded-lg mb-4'>
+                        <p>{{successMessage}}</p>
+                    </div>
+                {{/if}}
+
+                <!-- Error Message Section -->
+                {{#if error}}
+                    <div class='error-container bg-red-100 text-red-700 p-4 rounded-lg mb-4'>
+                        <ul>
+                            {{#each errorMessages}}
+                                <li>{{this}}</li>
+                            {{/each}}
+                        </ul>
+                    </div>
+                {{/if}}
+
+            </div>
+        </div>
+
+        <script>
+            function togglePasswordVisibility() { const passwordInput = document.getElementById('password'); const
+            passwordIcon = document.getElementById('password-icon'); if (passwordInput.type === 'password') {
+            passwordInput.type = 'text'; passwordIcon.textContent = 'Hide'; } else { passwordInput.type = 'password';
+            passwordIcon.textContent = 'Show'; } } function toggleConfirmPasswordVisibility() { const
+            confirmPasswordInput = document.getElementById('confirm-password'); const confirmPasswordIcon =
+            document.getElementById('confirm-password-icon'); if (confirmPasswordInput.type === 'password') {
+            confirmPasswordInput.type = 'text'; confirmPasswordIcon.textContent = 'Hide'; } else {
+            confirmPasswordInput.type = 'password'; confirmPasswordIcon.textContent = 'Show'; } }
+        </script>
+    </body>
+</html>
