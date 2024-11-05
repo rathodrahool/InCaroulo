@@ -15,6 +15,12 @@ let selectedSlideIndex = 0; // Default to the first slide
 
 // Initialization
 document.addEventListener('DOMContentLoaded', () => {
+    // Load saved carousel data from localStorage if it exists
+    const savedSlides = localStorage.getItem('carouselSlides');
+    if (savedSlides) {
+        slides = JSON.parse(savedSlides);
+    }
+
     document.getElementById('addSlideButton').addEventListener('click', addSlide);
 
     // Initialize Quill editor for description
@@ -23,15 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modules: {
             toolbar: [
                 ['bold', 'italic', 'underline', 'strike'],
-                [{ align: [] }],
                 [{ list: 'ordered' }, { list: 'bullet' }],
-                [{ script: 'sub' }, { script: 'super' }],
-                [{ color: [] }, { background: [] }],
-                [{ font: [] }],
-                [{ size: ['small', false, 'large', 'huge'] }],
-                [{ header: [1, 2, 3, 4, 5, 6, false] }],
-                ['blockquote', 'code-block'],
-                ['clean'],
             ],
         },
     });
@@ -40,12 +38,19 @@ document.addEventListener('DOMContentLoaded', () => {
     setupRealTimeListeners();
     setupSectionToggles();
 
+    // Set up image upload listener
+    document.querySelector('#imageSection input[type="file"]').addEventListener('change', handleImageUpload);
     // Automatically select the first slide on load
     selectSlide(0);
 
-    // Initial render with one default slide
+    // Initial render with the loaded or default slides
     renderSlides();
 });
+
+// Function to save carousel state to localStorage
+function saveCarouselToLocalStorage() {
+    localStorage.setItem('carouselSlides', JSON.stringify(slides));
+}
 
 // Function to add a new slide
 function addSlide() {
@@ -61,6 +66,7 @@ function addSlide() {
     };
     slides.push(newSlide);
     renderSlides();
+    saveCarouselToLocalStorage(); // Save to localStorage
 }
 
 // Function to render slides in the UI
@@ -82,6 +88,10 @@ function createSlideElement(slide, index) {
     const slideDiv = document.createElement('div');
     slideDiv.className =
         'slide bg-gray-200 w-64 h-80 rounded-lg shadow-md flex-shrink-0 relative flex flex-col items-center justify-center hover:shadow-lg transition duration-300 p-4';
+
+    if (index === selectedSlideIndex) {
+        slideDiv.classList.add('selected-slide');
+    }
 
     // Title
     if (slide.showTitle) {
@@ -121,7 +131,10 @@ function createSlideElement(slide, index) {
     slideDiv.appendChild(deleteButton);
 
     // Add click event to select the slide
-    slideDiv.addEventListener('click', () => selectSlide(index));
+    slideDiv.addEventListener('click', () => {
+        selectSlide(index); // Update selected slide
+        renderSlides(); // Re-render to update UI
+    });
 
     return slideDiv;
 }
@@ -159,6 +172,7 @@ function deleteSlide(index) {
     if (slides.length > 1) {
         slides.splice(index, 1);
         renderSlides();
+        saveCarouselToLocalStorage(); // Save to localStorage
     } else {
         alert('At least one slide must remain.');
     }
@@ -196,6 +210,7 @@ function saveSlideChanges() {
         slide.description = window.quill.root.innerHTML;
 
         renderSlides(); // Refresh slides in the UI
+        saveCarouselToLocalStorage(); // Save to localStorage
     }
 }
 
@@ -218,6 +233,7 @@ function updateSlideField(field) {
             slide.description = window.quill.root.innerHTML;
         }
         renderSlides();
+        saveCarouselToLocalStorage(); // Save to localStorage
     }
 }
 
@@ -228,6 +244,7 @@ function setupSectionToggles() {
             slides[selectedSlideIndex].showTitle = this.checked;
             updateSectionVisibility(slides[selectedSlideIndex]);
             renderSlides();
+            saveCarouselToLocalStorage(); // Save to localStorage
         }
     });
     document.getElementById('enableSubtitle').addEventListener('change', function () {
@@ -235,6 +252,7 @@ function setupSectionToggles() {
             slides[selectedSlideIndex].showSubtitle = this.checked;
             updateSectionVisibility(slides[selectedSlideIndex]);
             renderSlides();
+            saveCarouselToLocalStorage(); // Save to localStorage
         }
     });
     document.getElementById('enableDescription').addEventListener('change', function () {
@@ -242,6 +260,7 @@ function setupSectionToggles() {
             slides[selectedSlideIndex].showDescription = this.checked;
             updateSectionVisibility(slides[selectedSlideIndex]);
             renderSlides();
+            saveCarouselToLocalStorage(); // Save to localStorage
         }
     });
     document.getElementById('enableImage').addEventListener('change', function () {
@@ -249,8 +268,28 @@ function setupSectionToggles() {
             slides[selectedSlideIndex].showImage = this.checked;
             updateSectionVisibility(slides[selectedSlideIndex]);
             renderSlides();
+            saveCarouselToLocalStorage(); // Save to localStorage
         }
     });
+}
+
+// Function to handle image uploads
+function handleImageUpload(event) {
+    if (selectedSlideIndex !== null) {
+        const slide = slides[selectedSlideIndex];
+        const file = event.target.files[0]; // Get the first file from the input
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                slide.image = e.target.result; // Store the image as a Base64 URL
+                renderSlides(); // Refresh the slides to show the new image
+                saveCarouselToLocalStorage(); // Save to localStorage
+                selectSlide(selectedSlideIndex); // Re-select the current slide
+            };
+            reader.readAsDataURL(file); // Read the file as a data URL (Base64 encoded)
+        }
+    }
 }
 
 // Update section visibility based on the slide's settings
@@ -260,20 +299,3 @@ function updateSectionVisibility(slide) {
     document.getElementById('descriptionSection').style.display = slide.showDescription ? 'block' : 'none';
     document.getElementById('imageSection').style.display = slide.showImage ? 'block' : 'none';
 }
-
-// Function to handle image uploads
-function handleImageUpload(event) {
-    if (selectedSlideIndex !== null) {
-        const slide = slides[selectedSlideIndex];
-        const file = event.target.files[0];
-
-        if (file) {
-            const imageUrl = URL.createObjectURL(file);
-            slide.image = imageUrl; // Store image URL in the slide object
-            renderSlides(); // Refresh slides to show new image
-        }
-    }
-}
-
-// In the Initialization block, set up the image input listener
-document.getElementById('imageUploadInput').addEventListener('change', handleImageUpload);
