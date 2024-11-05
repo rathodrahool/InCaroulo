@@ -11,7 +11,7 @@ let slides = [
         showImage: true,
     },
 ]; // Array with initial slide
-let selectedSlideIndex = 0; // Default to the first slide
+let selectedSlideIndex = slides.length > 0 ? 0 : null;
 
 // Initialization
 document.addEventListener('DOMContentLoaded', () => {
@@ -76,6 +76,11 @@ function renderSlides() {
 
     slides.forEach((slide, index) => {
         const slideElement = createSlideElement(slide, index);
+
+        if (index === selectedSlideIndex) {
+            slideElement.classList.add('selected-slide');
+        }
+
         slidesContainer.appendChild(slideElement);
     });
 
@@ -169,10 +174,27 @@ function createDeleteButton(index) {
 
 // Function to delete a slide
 function deleteSlide(index) {
+    // Check if there is more than one slide
     if (slides.length > 1) {
+        // Remove the slide from the array
         slides.splice(index, 1);
+
+        // Update the selected slide index
+        if (selectedSlideIndex === index) {
+            // If the deleted slide was the last one, select the previous slide
+            if (slides.length > 0) {
+                selectedSlideIndex = Math.max(0, selectedSlideIndex - 1);
+            }
+        } else if (index < selectedSlideIndex) {
+            // If the deleted slide is before the selected one, decrease the index
+            selectedSlideIndex--;
+        }
+
+        // Re-render slides and update UI
         renderSlides();
-        saveCarouselToLocalStorage(); // Save to localStorage
+
+        // Save the updated carousel state to local storage
+        saveCarouselToLocalStorage();
     } else {
         alert('At least one slide must remain.');
     }
