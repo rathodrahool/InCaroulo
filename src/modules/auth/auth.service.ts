@@ -12,7 +12,6 @@ import * as bcrypt from 'bcrypt';
 
 // DTO (Data Transfer Objects)
 import { EmailSignupDto } from './dto/email.signup.dto';
-import { EmailVerifyDto } from './dto/email.verify.dto';
 import { EmailLoginDto } from './dto/email.login.dto';
 import { EmailForgetPasswordDto } from './dto/email.forget.password.dto';
 import { EmailUpdatePasswordDto } from './dto/email.update.password.dto';
@@ -237,71 +236,65 @@ export class AuthService {
         return result;
     }
 
-    async login(emailLoginDto: EmailLoginDto): Promise<void> {
-        const isExists: User = await this.userService.findOneWhere({
-            where: { email: emailLoginDto.email },
-        });
-        if (!isExists) {
-            throw new UnauthorizedException(AUTH_ERROR.WRONG_CREDENTIALS);
-        }
-        if (isExists.status === UserStatus.UNVERIFIED) {
-            throw new BadRequestException(AUTH_ERROR.ACCOUNT_NOT_VERIFIED);
-        }
-        const isValid = await this.validatePassword(emailLoginDto.password, isExists.password);
-        if (!isValid) {
-            throw new UnauthorizedException(AUTH_ERROR.WRONG_CREDENTIALS);
-        }
-        const otp = await this.otpService.handleOtpGeneration(isExists, isExists.email, VerificationType.LOGIN);
-        await this.emailService.sendOtpEmail(isExists, otp, expiryTimeEnum.FIVE_MIN);
-    }
+    async login(emailLoginDto: EmailLoginDto, req): Promise<object> {
+        try {
+            const user: User = await this.userService.findOneWhere({
+                where: { email: emailLoginDto.email },
+                relations: ['role'],
+            });
 
-    async verifyLogin(emailVerifyDto: EmailVerifyDto, req): Promise<object> {
-        const isExists: User = await this.userService.findOneWhere({
-            where: { email: emailVerifyDto.email },
-            relations: ['role'],
-        });
-        if (!isExists) {
-            throw new UnauthorizedException(AUTH_ERROR.WRONG_CREDENTIALS);
+            if (!user) {
+                throw new UnauthorizedException(AUTH_ERROR.WRONG_CREDENTIALS);
+            }
+
+            if (user.status === UserStatus.UNVERIFIED) {
+                throw new BadRequestException(AUTH_ERROR.ACCOUNT_NOT_VERIFIED);
+            }
+
+            const isValid = await this.validatePassword(emailLoginDto.password, user.password);
+            if (!isValid) {
+                throw new UnauthorizedException(AUTH_ERROR.WRONG_CREDENTIALS);
+            }
+
+            const payload: JwtPayload = {
+                email: user.email,
+                id: user.id,
+                roleName: user.role.role_name,
+            };
+
+            const [{ accessToken, refreshToken, accessTokenExpiryTime, refreshTokenExpiryTime }] = await Promise.all([
+                generateTokens(payload),
+                this.deviceInformationService.logoutAllDevice(user),
+            ]);
+
+            const extractedDeviceInfo = extractDeviceInfo({
+                request: req,
+                activity_type: ActivityType.LOGIN,
+                user: user,
+                is_active: true,
+            });
+
+            await Promise.all([
+                this.deviceInformationService.create(extractedDeviceInfo),
+                this.tokenService.create({
+                    entity: user,
+                    access_token: accessToken,
+                    access_token_expiry: accessTokenExpiryTime,
+                    refresh_token_expiry: refreshTokenExpiryTime,
+                    refresh_token: refreshToken,
+                    type: TokenTypeEnum.ACCESS,
+                }),
+            ]);
+
+            return {
+                id: payload.id,
+                email: payload.email,
+                access_token: accessToken,
+                refresh_token: refreshToken,
+            };
+        } catch (error) {
+            throw error;
         }
-        const isVerified = await this.otpService.validateOtp(isExists, emailVerifyDto.otp);
-        if (!isVerified) {
-            throw new BadRequestException(AUTH_ERROR.INVALID_OTP);
-        }
-        const payload: JwtPayload = {
-            email: isExists.email,
-            id: isExists.id,
-            roleName: isExists.role.role_name,
-        };
-        const {
-            accessToken: access_token,
-            refreshToken: refresh_token,
-            accessTokenExpiryTime,
-            refreshTokenExpiryTime,
-        } = generateTokens(payload);
-        await this.deviceInformationService.logoutAllDevice(isExists);
-        const extractedDeviceInfo = extractDeviceInfo({
-            request: req,
-            activity_type: ActivityType.LOGIN,
-            user: isExists,
-            is_active: true,
-        });
-        const DeviceInformation = await this.deviceInformationService.create(extractedDeviceInfo);
-        await this.tokenService.create({
-            entity: isExists,
-            access_token: access_token,
-            access_token_expiry: accessTokenExpiryTime,
-            refresh_token_expiry: refreshTokenExpiryTime,
-            refresh_token: refresh_token,
-            type: TokenTypeEnum.ACCESS,
-            device: DeviceInformation,
-        });
-        const result = {
-            id: payload.id,
-            email: payload.email,
-            access_token,
-            refresh_token,
-        };
-        return result;
     }
 
     async forgotPassword(emailForgetPasswordDto: EmailForgetPasswordDto, req): Promise<void> {

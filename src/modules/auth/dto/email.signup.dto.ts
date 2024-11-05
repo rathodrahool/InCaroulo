@@ -1,7 +1,6 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class EmailSignupDto {
-    // Existing fields
     @IsString()
     name: string;
 
@@ -13,25 +12,4 @@ export class EmailSignupDto {
 
     @IsString()
     confirmPassword: string;
-
-    // New fields
-    @IsOptional()
-    @IsString()
-    deviceId?: string;
-
-    @IsOptional()
-    @IsString()
-    deviceType?: string;
-
-    @IsOptional()
-    @IsString()
-    appVersion?: string;
-
-    @IsOptional()
-    @IsString()
-    timezone?: string;
-
-    @IsOptional()
-    @IsString()
-    deviceName?: string;
 }

@@ -7,7 +7,6 @@ import { Throttle } from '@nestjs/throttler';
 // DTO (Data Transfer Objects)
 import { EmailSignupDto } from './dto/email.signup.dto';
 import { EmailLoginDto } from './dto/email.login.dto';
-import { EmailVerifyDto } from './dto/email.verify.dto';
 import { EmailForgetPasswordDto } from './dto/email.forget.password.dto';
 import { EmailUpdatePasswordDto } from './dto/email.update.password.dto';
 import { RefreshTokenDto } from './dto/refresh.token.dto';
@@ -23,7 +22,6 @@ import { AUTH_SUCCESS, EMAIL } from '@shared/constants/messages';
 import { createLoginJoiSchema } from './schema/login.schema';
 import { JoiValidationPipe } from '@pipes/joi-validation.pipe';
 import { emailForgotPasswordJoiSchema } from './schema/email.forgot.password.schema';
-import { emailVerifyJoiSchema } from './schema/email.verify.schema';
 import { createUserJoiSchema } from '@modules/user/schema/create.user.schema';
 import { emailUpdatePasswordJoiSchema } from './schema/email.update.password.schema';
 import { refreshTokenSchema } from './schema/refresh.token.schema';
@@ -38,15 +36,33 @@ import { UUIDValidationPipe } from '@root/src/core/pipes/uuid-validation.pipe';
 @Controller('auth')
 export class AuthController {
     constructor(private authService: AuthService) {}
+
+    @Get('signup')
+    @Render('signup')
+    renderSignupPage() {
+        return {
+            title: 'Sign Up',
+        };
+    }
+
     @Get('login')
     @Render('login')
     renderLoginPage() {
-        return { title: 'Sign Up' };
+        return {
+            title: 'Login',
+        };
+    }
+    @Get('dashboard')
+    @Render('dashboard')
+    renderDashboardPage() {
+        return {
+            title: 'dashboard',
+        };
     }
     @Get('verificationMail')
     @Render('verificationMail')
     renderVerificationMailPage() {
-        return { title: 'Sign Up' };
+        return { title: 'Verify' };
     }
     @Get('forget')
     @Render('forgetPassword')
@@ -54,62 +70,30 @@ export class AuthController {
         return { title: 'Sign Up' };
     }
 
-    @Get('signup')
-    @Render('signup')
-    renderSignupPage(@Req() req) {
-        return {
-            title: 'Sign Up',
-            success: req.successMessage,
-            error: req.errorMessages,
-        };
-    }
     @Post('signup')
     async signUp(
         @Req() req,
-        @Body(new JoiValidationPipe(createUserJoiSchema)) validationResult: any,
+        @Body(new JoiValidationPipe(createUserJoiSchema)) emailSignupDto: EmailSignupDto,
         @Res() res: Response,
     ) {
-        if (!validationResult.valid) {
-            return res.render('signup', {
-                title: 'Sign Up',
-                error: true,
-                errorMessages: validationResult.messages,
-            });
-        }
-        const emailSignupDto: EmailSignupDto = validationResult.value;
+        await this.authService.signUp(emailSignupDto, req);
+        return response.successCreate(res, AUTH_SUCCESS.VERIFICATION_LINK_SENT);
+    }
 
-        try {
-            await this.authService.signUp(emailSignupDto, req);
-            return res.redirect('verificationMail');
-        } catch (error) {
-            return res.render('signup', {
-                title: 'Sign Up',
-                error: true,
-                errorMessages: error.response?.message || [error.message],
-            });
-        }
+    @Post('login')
+    async login(
+        @Body(new JoiValidationPipe(createLoginJoiSchema)) emailLoginDto: EmailLoginDto,
+        @Req() req,
+        @Res() res: Response,
+    ) {
+        const result = await this.authService.login(emailLoginDto, req);
+        return response.successResponse(res, AUTH_SUCCESS.LOGIN, result);
     }
 
     @Get('verify-signup/:uid')
     async verifySignup(@Param('uid', UUIDValidationPipe) uid: string, @Res() res: Response, @Req() req) {
         const result = await this.authService.verifySignup(uid, req);
         return response.successResponse(res, AUTH_SUCCESS.SIGN_UP, result);
-    }
-
-    @Post('login')
-    async login(@Body(new JoiValidationPipe(createLoginJoiSchema)) emailLoginDto: EmailLoginDto, @Res() res: Response) {
-        await this.authService.login(emailLoginDto);
-        return response.successResponse(res, AUTH_SUCCESS.OTP_SENT);
-    }
-
-    @Post('verify-otp')
-    async verify(
-        @Body(new JoiValidationPipe(emailVerifyJoiSchema)) emailVerifyDto: EmailVerifyDto,
-        @Req() req,
-        @Res() res: Response,
-    ) {
-        const result = await this.authService.verifyLogin(emailVerifyDto, req);
-        return response.successResponse(res, AUTH_SUCCESS.LOGIN, result);
     }
 
     @Post('forgot-password')

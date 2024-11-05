@@ -1,20 +1,26 @@
-import { PipeTransform, Injectable } from '@nestjs/common';
+import { PipeTransform, Injectable, BadRequestException } from '@nestjs/common';
 import * as Joi from 'joi';
 
 @Injectable()
 export class JoiValidationPipe implements PipeTransform {
-    constructor(private schema: Joi.ObjectSchema) {}
+    constructor(private readonly schema: Joi.ObjectSchema) {}
 
-    transform(value: object) {
-        const { error } = this.schema.validate(value, { abortEarly: false });
-
+    transform(value: any) {
+        const { error } = this.schema.validate(value, { abortEarly: true });
         if (error) {
-            return {
-                valid: false,
-                messages: error.details.map((detail) => detail.message.replace(/['"]/g, '')),
-            };
+            // Get the error message and clean it
+            let errorMessage = error.details[0].message.replace(/['"]/g, '');
+
+            // Custom error message for array type
+            if (error.details[0].type === 'array.includesRequiredUnknowns') {
+                errorMessage = 'At least one Select';
+            }
+
+            // Throw a BadRequestException with the custom message
+            throw new BadRequestException(errorMessage);
         }
 
-        return { valid: true, value };
+        // Return validated value if no error
+        return value;
     }
 }

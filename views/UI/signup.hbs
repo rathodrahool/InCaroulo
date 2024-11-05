@@ -2,7 +2,7 @@
     <head>
         <meta charset='UTF-8' />
         <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-        <title>{{title}}</title>
+        <title>{{title}} - InCaroulo</title>
         <script src='https://cdn.tailwindcss.com'></script>
         <style>
             #error-toast { transition: transform 0.3s ease, opacity 0.3s ease; transform: translateY(100%); opacity: 0;
@@ -18,13 +18,13 @@
                 </h2>
 
                 <!-- Signup Form -->
-                <form action='signup' method='POST'>
+                <form id='signupForm' action='signup' method='POST'>
                     <!-- Full Name -->
                     <div class='mb-4'>
                         <label class='block text-gray-600 font-semibold mb-2' for='name'>Full Name</label>
                         <input
                             type='text'
-                            id='name'
+                            id='full_name'
                             name='full_name'
                             class='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400'
                             placeholder='Enter your full name'
@@ -105,27 +105,21 @@
                     Already have an account?
                     <a href='login' class='text-blue-600 hover:underline'>Log In</a>
                 </p>
-
-                <!-- Error Toast Notification -->
-                {{#if error}}
-                    <div
-                        id='error-toast'
-                        class='fixed right-4 bottom-4 bg-red-100 text-red-700 p-4 rounded-lg shadow-lg flex items-center space-x-4'
-                    >
-                        <div>
-                            <ul>
-                                {{#each errorMessages}}
-                                    <li>{{this}}</li>
-                                {{/each}}
-                            </ul>
-                        </div>
-                        <button id='close-toast' class='ml-4 text-red-600 hover:text-red-800 focus:outline-none'>
-                            &times;
-                        </button>
-                    </div>
-                {{/if}}
-
             </div>
+
+            <!-- Error Toast Notification -->
+            <div
+                id='error-toast'
+                class='fixed right-4 bottom-4 bg-red-100 text-red-700 p-4 rounded-lg shadow-lg flex items-center space-x-4'
+            >
+                <div>
+                    <ul></ul>
+                </div>
+                <button id='close-toast' class='ml-4 text-red-600 hover:text-red-800 focus:outline-none'>
+                    &times;
+                </button>
+            </div>
+
         </div>
         <script src='/js/signup.js'></script>
 

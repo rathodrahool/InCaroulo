@@ -1,5 +1,4 @@
 import { Entity, ManyToOne, JoinColumn, OneToMany, Column } from 'typeorm';
-import { Exclude } from 'class-transformer';
 import { DefaultEntity } from '@shared/entities/default.entity';
 import { Role } from '@modules/role/entities/role.entity';
 import { UserStatus } from '@shared/constants/enum';
@@ -15,7 +14,6 @@ export class User extends DefaultEntity {
     @Column({ unique: true, length: 255, nullable: true })
     email: string;
 
-    @Exclude()
     @Column({ length: 255, nullable: true })
     password: string;
 

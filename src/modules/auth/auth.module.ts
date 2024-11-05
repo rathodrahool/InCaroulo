@@ -68,10 +68,10 @@ import { DeviceInformationMiddleware } from '@middlewares/header.middleware';
 export class AuthModule {
     configure(consumer: MiddlewareConsumer) {
         // consumer.apply(DeviceInformationMiddleware).forRoutes({ path: 'auth/signup', method: RequestMethod.POST });
-        consumer
-            .apply(DeviceInformationMiddleware)
-            .forRoutes({ path: 'auth/verify-signup/:uid', method: RequestMethod.GET });
-        consumer.apply(DeviceInformationMiddleware).forRoutes({ path: 'auth/login', method: RequestMethod.POST });
+        // consumer
+        //     .apply(DeviceInformationMiddleware)
+        //     .forRoutes({ path: 'auth/verify-signup/:uid', method: RequestMethod.GET });
+        // consumer.apply(DeviceInformationMiddleware).forRoutes({ path: 'auth/login', method: RequestMethod.POST });
         consumer.apply(DeviceInformationMiddleware).forRoutes({ path: 'auth/verify-otp', method: RequestMethod.POST });
 
         consumer
