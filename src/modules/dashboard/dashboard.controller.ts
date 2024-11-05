@@ -25,7 +25,7 @@ export class DashboardController {
     @Render('settings')
     renderSettingsPage() {
         return {
-            title: 'Profile Settings',
+            title: 'settings',
         };
     }
 }
