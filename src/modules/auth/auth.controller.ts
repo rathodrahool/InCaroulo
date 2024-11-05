@@ -52,13 +52,7 @@ export class AuthController {
             title: 'Login',
         };
     }
-    @Get('dashboard')
-    @Render('dashboard')
-    renderDashboardPage() {
-        return {
-            title: 'dashboard',
-        };
-    }
+
     @Get('verificationMail')
     @Render('verificationMail')
     renderVerificationMailPage() {

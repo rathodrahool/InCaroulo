@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showSuccessToast(data.message);
 
             setTimeout(() => {
-                window.location.href = 'http://localhost:3400/api/v1/auth/dashboard';
+                window.location.href = 'http://localhost:3400/api/v1/dashboard';
             }, 2000);
         } catch (error) {
             showErrorToast([error.message]);

@@ -3,7 +3,6 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { BullModule } from '@nestjs/bull';
-import { ServeStaticModule } from '@nestjs/serve-static';
 import { ScheduleModule } from '@nestjs/schedule';
 // import { APP_GUARD } from '@nestjs/core';
 
@@ -34,9 +33,9 @@ import { EmailService } from '@shared/services/mail/mail.service';
 
 // Common constants and enums
 import { THROTTLER_TTL, THROTTLER_LIMIT } from '@shared/constants/constant';
-import { join } from 'path';
 
 import { DropdownModule } from '@modules/dropdown/dropdown.module';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
 
 @Module({
     imports: [
@@ -75,6 +74,7 @@ import { DropdownModule } from '@modules/dropdown/dropdown.module';
         SectionModule,
         PermissionModule,
         DropdownModule,
+        DashboardModule,
     ],
     controllers: [],
     providers: [

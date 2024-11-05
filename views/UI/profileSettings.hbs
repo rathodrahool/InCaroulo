@@ -1,0 +1,153 @@
+<html lang='en'>
+    <head>
+        <meta charset='UTF-8' />
+        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+        <title>{{title}} - InCaroulo </title>
+        <script src='https://cdn.tailwindcss.com'></script>
+    </head>
+    <body class='bg-gray-100'>
+        <!-- Main Container -->
+        <div class='flex h-screen'>
+            <!-- Sidebar -->
+            <aside class='w-64 bg-gray-900 text-white'>
+                <div class='p-6 h-full'>
+                    <h2 class='text-xl font-bold mb-4'>Post Creator</h2>
+                    <nav>
+                        <ul>
+                            <li class='mb-3'>
+                                <a
+                                    href='http://localhost:3400/api/v1/dashboard'
+                                    class='block p-3 rounded-lg hover:bg-gray-700 transition duration-300'
+                                >Create Carousel</a>
+                            </li>
+                            <li class='mb-3'>
+                                <a
+                                    href='http://localhost:3400/api/v1/dashboard/me'
+                                    class='block p-3 rounded-lg bg-blue-600 hover:bg-blue-500 transition duration-300'
+                                >Profile</a>
+                            </li>
+                            <li class='mb-3'>
+                                <a
+                                    href='http://localhost:3400/api/v1/dashboard/settings'
+                                    class='block p-3 rounded-lg hover:bg-gray-700 transition duration-300'
+                                >Settings</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </aside>
+
+            <!-- Content area -->
+            <div class='flex-1 flex flex-col'>
+                <!-- Top Navigation -->
+                <header class='bg-white shadow p-4 flex justify-between items-center'>
+                    <h1 class='text-2xl font-semibold text-gray-700'>
+                        Carousel Post Creator
+                    </h1>
+                    <div>
+                        <button
+                            class='bg-green-500 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-green-600 transition duration-300'
+                        >
+                            Save Settings
+                        </button>
+                    </div>
+                </header>
+
+                <!-- Main Content -->
+                <main class='flex-1 p-6 overflow-y-auto'>
+                    <!-- Profile Settings -->
+                    <div id='profile' class='max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg'>
+                        <h1 class='text-2xl font-semibold text-gray-700 mb-4'>
+                            Profile Settings
+                        </h1>
+
+                        <!-- Profile Image Upload -->
+                        <div class='mb-4'>
+                            <label class='block mb-2 text-gray-600 font-semibold'>Profile Image:</label>
+                            <input
+                                type='file'
+                                class='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400'
+                                accept='image/*'
+                            />
+                        </div>
+
+                        <!-- Name Input -->
+                        <div class='mb-4'>
+                            <label class='block mb-2 text-gray-600 font-semibold'>Name:</label>
+                            <input
+                                type='text'
+                                class='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400'
+                                placeholder='Enter your name...'
+                            />
+                        </div>
+
+                        <!-- Social Media Handle Input -->
+                        <div class='mb-4'>
+                            <label class='block mb-2 text-gray-600 font-semibold'>Social Media Handle:</label>
+                            <input
+                                type='text'
+                                class='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400'
+                                placeholder='Enter your social media handle...'
+                            />
+                        </div>
+
+                        <!-- Website URL Input (Optional) -->
+                        <div class='mb-4'>
+                            <label class='block mb-2 text-gray-600 font-semibold'>Website URL (Optional):</label>
+                            <input
+                                type='url'
+                                class='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400'
+                                placeholder='Enter your website URL...'
+                            />
+                        </div>
+
+                        <!-- Headshot Display Options -->
+                        <div class='mb-6'>
+                            <h4 class='font-semibold text-gray-600 mb-4'>
+                                Display Profile Info on Slides:
+                            </h4>
+                            <div class='flex items-center'>
+                                <input
+                                    type='radio'
+                                    class='form-radio text-blue-600 mr-2'
+                                    name='displayOption'
+                                    value='firstLast'
+                                    id='firstLast'
+                                />
+                                <label for='firstLast' class='text-gray-700'>First and Last Slides</label>
+                            </div>
+                            <div class='flex items-center'>
+                                <input
+                                    type='radio'
+                                    class='form-radio text-blue-600 mr-2'
+                                    name='displayOption'
+                                    value='everySlide'
+                                    id='everySlide'
+                                />
+                                <label for='everySlide' class='text-gray-700'>Every Slide</label>
+                            </div>
+                            <div class='flex items-center'>
+                                <input
+                                    type='radio'
+                                    class='form-radio text-blue-600 mr-2'
+                                    name='displayOption'
+                                    value='none'
+                                    id='none'
+                                    checked
+                                />
+                                <label for='none' class='text-gray-700'>Do Not Display</label>
+                            </div>
+                        </div>
+
+                        <!-- Save Changes Button -->
+                        <button
+                            class='bg-green-500 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-green-600 transition duration-300'
+                        >
+                            Save Changes
+                        </button>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </body>
+</html>

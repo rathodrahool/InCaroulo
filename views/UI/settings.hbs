@@ -1,0 +1,228 @@
+<html lang='en'>
+    <head>
+        <meta charset='UTF-8' />
+        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+        <title>Settings - Social Media Carousel Creator</title>
+        <script src='https://cdn.tailwindcss.com'></script>
+        <link href='https://cdn.quilljs.com/1.3.6/quill.snow.css' rel='stylesheet' />
+        <script src='https://cdn.quilljs.com/1.3.6/quill.js'></script>
+        <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css' />
+    </head>
+    <body class='bg-gray-100'>
+        <!-- Main Container -->
+        <div class='flex h-screen'>
+            <!-- Sidebar -->
+            <aside class='w-64 bg-gray-900 text-white'>
+                <div class='p-6 h-full'>
+                    <h2 class='text-xl font-bold mb-4'>Post Creator</h2>
+                    <nav>
+                        <ul>
+                            <li class='mb-3'>
+                                <a
+                                    href='http://localhost:3400/api/v1/dashboard'
+                                    class='block p-3 rounded-lg hover:bg-gray-700 transition duration-300'
+                                >Create Carousel</a>
+                            </li>
+                            <li class='mb-3'>
+                                <a
+                                    href='http://localhost:3400/api/v1/dashboard/me'
+                                    class='block p-3 rounded-lg hover:bg-gray-700 transition duration-300'
+                                >Profile</a>
+                            </li>
+                            <li class='mb-3'>
+                                <a
+                                    href='http://localhost:3400/api/v1/dashboard/settings'
+                                    class='block p-3 rounded-lg bg-blue-600 hover:bg-blue-500 transition duration-300'
+                                >Settings</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </aside>
+
+            <!-- Content area -->
+            <div class='flex-1 flex flex-col'>
+                <!-- Top Navigation -->
+                <header class='bg-white shadow p-4 flex justify-between items-center'>
+                    <h1 class='text-2xl font-semibold text-gray-700'>Settings</h1>
+                    <div>
+                        <button
+                            class='bg-green-500 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-green-600 transition duration-300'
+                        >
+                            Save Settings
+                        </button>
+                    </div>
+                </header>
+
+                <!-- Main Content -->
+                <main class='flex-1 p-6 overflow-y-auto'>
+                    <div class='grid grid-cols-1 gap-6'>
+                        <!-- Settings Form -->
+                        <div class='bg-white p-6 rounded-lg shadow-lg'>
+                            <h3 class='text-lg font-bold mb-4 text-gray-700'>
+                                Customize Your Settings
+                            </h3>
+
+                            <!-- Color Palette Selection -->
+                            <div class='mb-4'>
+                                <label class='block mb-2 text-gray-600 font-semibold'>Choose Color Palette:</label>
+                                <div class='flex items-center space-x-4'>
+                                    <button
+                                        data-value='2-color'
+                                        class='color-palette-btn w-full p-3 border border-gray-300 rounded-lg hover:bg-blue-100 transition duration-300'
+                                    >
+                                        <i class='fas fa-paint-brush mr-2'></i>
+                                        2 Color
+                                    </button>
+                                    <button
+                                        data-value='3-color'
+                                        class='color-palette-btn w-full p-3 border border-gray-300 rounded-lg hover:bg-blue-100 transition duration-300'
+                                    >
+                                        <i class='fas fa-paint-brush mr-2'></i>
+                                        3 Color
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Color Picker -->
+                            <div id='colorPickers' class='grid grid-cols-1 gap-4 mb-6'>
+                                <div id='twoColorPicker' class='hidden'>
+                                    <label class='block mb-2 text-gray-600 font-semibold'>Color 1:</label>
+                                    <input
+                                        type='color'
+                                        class='w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-400 transition duration-300'
+                                    />
+                                    <label class='block mb-2 text-gray-600 font-semibold'>Color 2:</label>
+                                    <input
+                                        type='color'
+                                        class='w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-400 transition duration-300'
+                                    />
+                                </div>
+                                <div id='threeColorPicker' class='hidden'>
+                                    <label class='block mb-2 text-gray-600 font-semibold'>Color 1:</label>
+                                    <input
+                                        type='color'
+                                        class='w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-400 transition duration-300'
+                                    />
+                                    <label class='block mb-2 text-gray-600 font-semibold'>Color 2:</label>
+                                    <input
+                                        type='color'
+                                        class='w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-400 transition duration-300'
+                                    />
+                                    <label class='block mb-2 text-gray-600 font-semibold'>Color 3:</label>
+                                    <input
+                                        type='color'
+                                        class='w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-400 transition duration-300'
+                                    />
+                                </div>
+                            </div>
+
+                            <!-- Font Upload -->
+                            <div class='mb-4'>
+                                <label class='block mb-2 text-gray-600 font-semibold'>Upload Custom Font:</label>
+                                <input
+                                    type='file'
+                                    class='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 transition duration-300'
+                                />
+                            </div>
+
+                            <!-- Text Settings -->
+                            <div class='mb-4'>
+                                <h4 class='font-semibold mb-2 text-gray-600'>Text Settings:</h4>
+                                <div class='mb-4'>
+                                    <label class='block mb-1 text-gray-600'>Title Font Size:</label>
+                                    <input
+                                        type='number'
+                                        class='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 transition duration-300'
+                                        placeholder='Enter size in px'
+                                    />
+                                </div>
+                                <div class='mb-4'>
+                                    <label class='block mb-1 text-gray-600'>Subtitle Font Size:</label>
+                                    <input
+                                        type='number'
+                                        class='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 transition duration-300'
+                                        placeholder='Enter size in px'
+                                    />
+                                </div>
+                                <div class='mb-4'>
+                                    <label class='block mb-1 text-gray-600'>Description Font Size:</label>
+                                    <input
+                                        type='number'
+                                        class='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 transition duration-300'
+                                        placeholder='Enter size in px'
+                                    />
+                                </div>
+                                <div class='mb-4'>
+                                    <label class='block mb-1 text-gray-600'>Text Alignment:</label>
+                                    <div class='flex space-x-4'>
+                                        <button
+                                            class='text-gray-600 border border-gray-300 rounded-lg p-2 hover:bg-gray-100 transition duration-300'
+                                            data-value='left'
+                                        >
+                                            <i class='fas fa-align-left'></i>
+                                        </button>
+                                        <button
+                                            class='text-gray-600 border border-gray-300 rounded-lg p-2 hover:bg-gray-100 transition duration-300'
+                                            data-value='center'
+                                        >
+                                            <i class='fas fa-align-center'></i>
+                                        </button>
+                                        <button
+                                            class='text-gray-600 border border-gray-300 rounded-lg p-2 hover:bg-gray-100 transition duration-300'
+                                            data-value='right'
+                                        >
+                                            <i class='fas fa-align-right'></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Aspect Ratio Selection -->
+                            <div class='mb-4'>
+                                <label class='block mb-2 text-gray-600 font-semibold'>Aspect Ratio:</label>
+                                <div class='flex space-x-4'>
+                                    <button
+                                        class='aspect-ratio-btn w-full p-3 border border-gray-300 rounded-lg hover:bg-blue-100 transition duration-300'
+                                        data-value='16:9'
+                                    >
+                                        <i class='fas fa-expand'></i>
+                                        16:9
+                                    </button>
+                                    <button
+                                        class='aspect-ratio-btn w-full p-3 border border-gray-300 rounded-lg hover:bg-blue-100 transition duration-300'
+                                        data-value='4:3'
+                                    >
+                                        <i class='fas fa-expand'></i>
+                                        4:3
+                                    </button>
+                                    <button
+                                        class='aspect-ratio-btn w-full p-3 border border-gray-300 rounded-lg hover:bg-blue-100 transition duration-300'
+                                        data-value='1:1'
+                                    >
+                                        <i class='fas fa-expand'></i>
+                                        1:1
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <script>
+            // Show/hide color pickers based on palette selection const colorPaletteButtons =
+            document.querySelectorAll(".color-palette-btn"); const twoColorPicker =
+            document.getElementById("twoColorPicker"); const threeColorPicker =
+            document.getElementById("threeColorPicker"); colorPaletteButtons.forEach((button) => {
+            button.addEventListener("click", function () { const value = this.getAttribute("data-value"); if (value ===
+            "2-color") { twoColorPicker.classList.remove("hidden"); threeColorPicker.classList.add("hidden"); } else {
+            twoColorPicker.classList.add("hidden"); threeColorPicker.classList.remove("hidden"); } }); }); // Text
+            alignment buttons const textAlignmentButtons = document.querySelectorAll(".aspect-ratio-btn");
+            textAlignmentButtons.forEach((button) => { button.addEventListener("click", function () {
+            textAlignmentButtons.forEach((btn) => btn.classList.remove("bg-blue-100") );
+            this.classList.add("bg-blue-100"); }); });
+        </script>
+    </body>
+</html>
