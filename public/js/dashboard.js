@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Set up image upload listener
     document.querySelector('#imageSection input[type="file"]').addEventListener('change', handleImageUpload);
+
     // Automatically select the first slide on load
     selectSlide(0);
 
@@ -93,10 +94,6 @@ function createSlideElement(slide, index) {
     const slideDiv = document.createElement('div');
     slideDiv.className =
         'slide bg-gray-200 w-64 h-80 rounded-lg shadow-md flex-shrink-0 relative flex flex-col items-center justify-center hover:shadow-lg transition duration-300 p-4';
-
-    if (index === selectedSlideIndex) {
-        slideDiv.classList.add('selected-slide');
-    }
 
     // Title
     if (slide.showTitle) {
@@ -295,29 +292,26 @@ function setupSectionToggles() {
     });
 }
 
-// Function to handle image uploads
-function handleImageUpload(event) {
-    if (selectedSlideIndex !== null) {
-        const slide = slides[selectedSlideIndex];
-        const file = event.target.files[0]; // Get the first file from the input
-
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                slide.image = e.target.result; // Store the image as a Base64 URL
-                renderSlides(); // Refresh the slides to show the new image
-                saveCarouselToLocalStorage(); // Save to localStorage
-                selectSlide(selectedSlideIndex); // Re-select the current slide
-            };
-            reader.readAsDataURL(file); // Read the file as a data URL (Base64 encoded)
-        }
-    }
-}
-
-// Update section visibility based on the slide's settings
+// Update visibility of sections based on toggle settings
 function updateSectionVisibility(slide) {
     document.getElementById('titleSection').style.display = slide.showTitle ? 'block' : 'none';
     document.getElementById('subtitleSection').style.display = slide.showSubtitle ? 'block' : 'none';
     document.getElementById('descriptionSection').style.display = slide.showDescription ? 'block' : 'none';
     document.getElementById('imageSection').style.display = slide.showImage ? 'block' : 'none';
+}
+
+// Handle image upload
+function handleImageUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            if (selectedSlideIndex !== null) {
+                slides[selectedSlideIndex].image = e.target.result; // Set the image URL for the selected slide
+                renderSlides();
+                saveCarouselToLocalStorage(); // Save to localStorage
+            }
+        };
+        reader.readAsDataURL(file);
+    }
 }
