@@ -37,6 +37,7 @@ import { THROTTLER_TTL, THROTTLER_LIMIT } from '@shared/constants/constant';
 import { DropdownModule } from '@modules/dropdown/dropdown.module';
 import { ScraperModule } from './modules/scraper/scraper.module';
 import { SummarizationModule } from './modules/summarization/summarization.module';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
 
 @Module({
     imports: [
@@ -77,6 +78,7 @@ import { SummarizationModule } from './modules/summarization/summarization.modul
         DropdownModule,
         ScraperModule,
         SummarizationModule,
+        DashboardModule,
     ],
     controllers: [],
     providers: [

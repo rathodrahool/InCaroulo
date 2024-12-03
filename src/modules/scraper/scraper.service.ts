@@ -24,12 +24,15 @@ export class ScraperService {
                 result[url] = 'Error scraping the URL';
             }
         }
+
         return result;
     }
     // Scrape meaningful text content from a single URL
     private async scrapeTextFromUrl(url: string): Promise<string> {
         try {
+            console.log('this is working');
             const response = await axios.get(url);
+            console.log(response);
             const $ = cheerio.load(response.data);
             let scrapedText = '';
             const textTags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li', 'span'];

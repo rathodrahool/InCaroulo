@@ -1,197 +1,46 @@
-<html lang='en'>
-    <head>
-        <meta charset='UTF-8' />
-        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-        <title>{{title}} - InCaroulo </title>
-        <script src='https://cdn.tailwindcss.com'></script>
-        <link href='https://cdn.quilljs.com/1.3.6/quill.snow.css' rel='stylesheet' />
-        <script src='https://cdn.quilljs.com/1.3.6/quill.js'></script>
-        <style>
-            /* Highlight selected slide */ .selected-slide { border: 2px solid #3182ce; /* Blue border for selected
-            slide */ background-color: #ebf8ff; /* Light blue background for selected slide */ transition:
-            background-color 0.3s ease, border-color 0.3s ease; }
-        </style>
-
-    </head>
-    <body class='bg-gray-100'>
-        <!-- Main Container -->
-        <div class='flex h-screen'>
-            <!-- Sidebar -->
-            <aside class='w-64 bg-gray-900 text-white'>
-                <div class='p-6 h-full'>
-                    <h2 class='text-xl font-bold mb-4'>Post Creator</h2>
-                    <nav>
-                        <ul>
-                            <li class='mb-3'>
-                                <a
-                                    href='http://localhost:3400/api/v1/dashboard'
-                                    class='block p-3 rounded-lg bg-blue-600 hover:bg-blue-500 transition duration-300'
-                                >Create Carousel</a>
-                            </li>
-                            <li class='mb-3'>
-                                <a
-                                    href='http://localhost:3400/api/v1/dashboard/me'
-                                    class='block p-3 rounded-lg hover:bg-gray-700 transition duration-300'
-                                >Profile</a>
-                            </li>
-                            <li class='mb-3'>
-                                <a
-                                    href='http://localhost:3400/api/v1/dashboard/settings'
-                                    class='block p-3 rounded-lg hover:bg-gray-700 transition duration-300'
-                                >Settings</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </aside>
-
-            <!-- Content area -->
-            <div class='flex-1 flex flex-col'>
-                <!-- Top Navigation -->
-                <header class='bg-white shadow p-4 flex justify-between items-center'>
-                    <h1 class='text-2xl font-semibold text-gray-700'>
-                        Carousel Post Creator
-                    </h1>
-                    <div>
-                        <button
-                            class='bg-green-500 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-green-600 transition duration-300'
-                        >
-                            Save Post
-                        </button>
-                    </div>
-                </header>
-
-                <!-- Main Content -->
-                <main class='flex-1 p-6 overflow-y-auto'>
-                    <div class='grid grid-cols-1 gap-6'>
-                        <!-- Carousel Editor -->
-                        <div class='bg-white p-6 rounded-lg shadow-lg'>
-                            <h3 class='text-lg font-bold mb-4 text-gray-700'>
-                                Carousel Editor
-                            </h3>
-
-                            <!-- Carousel Slides Container -->
-                            <div class='carousel-slides space-x-6 overflow-x-auto flex mb-6'>
-                                <!-- Slide 1 -->
-                                <div
-                                    class='slide bg-gray-200 w-64 h-80 rounded-lg shadow-md flex-shrink-0 flex items-center justify-center hover:shadow-lg transition duration-300'
-                                >
-                                    <span class='text-gray-600'>Slide 1</span>
-                                </div>
-                                <!-- Slide 2 -->
-                                <div
-                                    class='slide bg-gray-200 w-64 h-80 rounded-lg shadow-md flex-shrink-0 flex items-center justify-center hover:shadow-lg transition duration-300'
-                                >
-                                    <span class='text-gray-600'>Slide 2</span>
-                                </div>
-                                <!-- Add Slide Button -->
-                                <div
-                                    id='addSlideButton'
-                                    class='w-64 h-80 flex-shrink-0 flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg hover:border-gray-500 transition duration-300'
-                                >
-                                    <button class='text-gray-500 hover:text-gray-700'>
-                                        + Add Slide
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Slide Editor -->
-                            <div class='slide-editor bg-gray-100 p-6 rounded-lg shadow-inner'>
-                                <h4 class='font-semibold mb-4 text-gray-600'>
-                                    Edit Slide Content
-                                </h4>
-
-                                <!-- Enable/Disable Options -->
-                                <div class='grid grid-cols-1 md:grid-cols-4 gap-4 mb-6'>
-                                    <div class='flex items-center'>
-                                        <input
-                                            type='checkbox'
-                                            class='form-checkbox text-blue-600 mr-2'
-                                            id='enableTitle'
-                                            checked
-                                        />
-                                        <label for='enableTitle' class='text-gray-700'>Enable Title</label>
-                                    </div>
-
-                                    <div class='flex items-center'>
-                                        <input
-                                            type='checkbox'
-                                            class='form-checkbox text-blue-600 mr-2'
-                                            id='enableSubtitle'
-                                            checked
-                                        />
-                                        <label for='enableSubtitle' class='text-gray-700'>Enable Subtitle</label>
-                                    </div>
-
-                                    <div class='flex items-center'>
-                                        <input
-                                            type='checkbox'
-                                            class='form-checkbox text-blue-600 mr-2'
-                                            id='enableImage'
-                                            checked
-                                        />
-                                        <label for='enableImage' class='text-gray-700'>Enable Image</label>
-                                    </div>
-
-                                    <div class='flex items-center'>
-                                        <input
-                                            type='checkbox'
-                                            class='form-checkbox text-blue-600 mr-2'
-                                            id='enableDescription'
-                                            checked
-                                        />
-                                        <label for='enableDescription' class='text-gray-700'>Enable Description</label>
-                                    </div>
-                                </div>
-
-                                <!-- Slide Title -->
-                                <div id='titleSection' class='mb-4'>
-                                    <label class='block mb-2 text-gray-600 font-semibold'>Title:</label>
-                                    <input
-                                        type='text'
-                                        class='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400'
-                                        placeholder='Enter slide title...'
-                                    />
-                                </div>
-
-                                <!-- Slide Subtitle -->
-                                <div id='subtitleSection' class='mb-4'>
-                                    <label class='block mb-2 text-gray-600 font-semibold'>Subtitle:</label>
-                                    <input
-                                        type='text'
-                                        class='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400'
-                                        placeholder='Enter slide subtitle...'
-                                    />
-                                </div>
-
-                                <!-- Slide Description (Updated to Textarea) -->
-                                <!-- Slide Description (Updated to Textarea) -->
-                                <div id='descriptionSection' class='mb-4' style='display: block'>
-                                    <label class='block mb-2 text-gray-600 font-semibold'>Description:</label>
-                                    <div
-                                        id='descriptionEditor'
-                                        class='border border-gray-300'
-                                        style='height: 150px'
-                                    ></div>
-                                </div>
-
-                                <!-- Slide Image Upload -->
-                                <!-- Slide Image Upload -->
-                                <div id='imageSection' class='mb-4'>
-                                    <label class='block mb-2 text-gray-600 font-semibold'>Upload Image:</label>
-                                    <input
-                                        type='file'
-                                        class='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400'
-                                    />
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </main>
-            </div>
-        </div>
-
-        <script src='/js/dashboard.js'></script>
-    </body>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-roboto">
+<div class="min-h-screen flex items-center justify-center">
+<div class="bg-white shadow-lg rounded-lg p-8 max-w-lg w-full">
+<h1 class="text-3xl font-bold text-center mb-6">Dashboard</h1>
+<form action='dashboard' method='POST'>
+<div class="mb-6">
+<label for="label" class="block text-gray-700 font-medium mb-2">Role</label>
+<div class="relative">
+<select id="label" name="label" class="block w-full bg-gray-100 border border-gray-300 rounded-lg py-3 px-4 appearance-none">
+<option value="ceo">CEO</option>
+<option value="hiring-manager">Hiring Manager</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+<i class="fas fa-chevron-down"></i>
+</div>
+</div>
+</div>
+<div class="mb-6">
+<label for="name" class="block text-gray-700 font-medium mb-2">Name</label>
+<input type="name" id="name" name="name" class="block w-full bg-gray-100 border border-gray-300 rounded-lg py-3 px-4" placeholder="Enter name">
+</div>
+<div class="mb-6">
+<label for="content" class="block text-gray-700 font-medium mb-2">Content</label>
+<textarea id="content" name="content" rows="10" class="block w-full bg-gray-100 border border-gray-300 rounded-lg py-3 px-4" placeholder="Enter website Content"></textarea>
+</div>
+<div class="mb-6">
+<label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
+<input type="email" id="email" name="email" class="block w-full bg-gray-100 border border-gray-300 rounded-lg py-3 px-4" placeholder="Enter email">
+</div>
+<div class="flex justify-center">
+<button type="submit" class="bg-blue-500 text-white font-medium py-3 px-6 rounded-lg hover:bg-blue-600 transition duration-300">Submit</button>
+</div>
+</form>
+</div>
+</div>
+</body>
 </html>
