@@ -15,27 +15,23 @@ export class ScraperService {
     // Scrape and store meaningful data from multiple URLs
     async scrapeTextFromUrls(urls: string[]): Promise<Record<string, string>> {
         const result: Record<string, string> = {};
-
         for (const url of urls) {
             try {
                 const scrapedData = await this.scrapeTextFromUrl(url);
-                await this.saveScrapedData(url, scrapedData); // Save to DB
+                await this.saveScrapedData(url, scrapedData);
                 result[url] = scrapedData;
             } catch (error) {
                 result[url] = 'Error scraping the URL';
             }
         }
-
         return result;
     }
-
     // Scrape meaningful text content from a single URL
     private async scrapeTextFromUrl(url: string): Promise<string> {
         try {
             const response = await axios.get(url);
             const $ = cheerio.load(response.data);
             let scrapedText = '';
-
             const textTags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li', 'span'];
             textTags.forEach((tag) => {
                 $(tag).each((_, element) => {
@@ -45,7 +41,6 @@ export class ScraperService {
                     }
                 });
             });
-
             return scrapedText.trim();
         } catch (error) {
             throw new HttpException('Failed to scrape URL', HttpStatus.BAD_REQUEST);
@@ -57,7 +52,6 @@ export class ScraperService {
         const scrapedData = new ScrapedData();
         scrapedData.url = url;
         scrapedData.content = content;
-
         await this.scrapedDataRepository.save(scrapedData);
     }
 }
