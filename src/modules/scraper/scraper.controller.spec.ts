@@ -3,18 +3,18 @@ import { ScraperController } from './scraper.controller';
 import { ScraperService } from './scraper.service';
 
 describe('ScraperController', () => {
-  let controller: ScraperController;
+    let controller: ScraperController;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [ScraperController],
-      providers: [ScraperService],
-    }).compile();
+    beforeEach(async () => {
+        const module: TestingModule = await Test.createTestingModule({
+            controllers: [ScraperController],
+            providers: [ScraperService],
+        }).compile();
 
-    controller = module.get<ScraperController>(ScraperController);
-  });
+        controller = module.get<ScraperController>(ScraperController);
+    });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
-  });
+    it('should be defined', () => {
+        expect(controller).toBeDefined();
+    });
 });
