@@ -24,27 +24,28 @@ export class SummarizationService {
                 model: 'gemini-1.5-flash',
             });
 
-            const prompt = `Use the provided content to draft a concise, engaging, and professional email addressed to the CEO of the organization. The email should include the following:
-
-    Subject Line: Craft a compelling subject line that grabs attention, such as:
-        “Inspired by Your Vision and Leadership”
-        “A Note of Appreciation for [Company Name: would summarized on that input context]’s Mission”
-
-    Opening Paragraph:
-        Start with a warm greeting and introduction (e.g., “Dear [if label is hiring manager then that should come or if label is ceo then that should come ${data.label} ${data.name}], as a keen follower of [Company Name], I felt compelled to reach out.”).
-        Mention how you came across their website or work and why you felt inspired.
-
-    Body of the Email:
-        Highlight specific aspects of their mission or vision that resonate with you (use details from the input content).
-        Appreciate a unique feature or initiative their organization is driving.
-        Acknowledge the positive impact they are creating in their field or community.
-
-    Closing Paragraph:
-        Express genuine gratitude for their work and leadership.
-        End with a forward-looking statement or offer, such as hoping to see more of their success or collaborating in some capacity.
-        Include a polite sign-off (e.g., “With admiration and best regards,”).
-
-    Call-to-Action (Optional): If appropriate, add a soft CTA, like asking for a brief meeting or sharing your thoughts further: here is input :\n${data.content}`;
+            // Ensure all inputs from the DTO are incorporated
+            const prompt = `Use the provided content to draft a concise, engaging, and professional email addressed to the ${data.label} of the organization. The email should include the following:
+    
+            Subject Line: Craft a compelling subject line that grabs attention, such as:
+                “Inspired by Your Vision and Leadership”
+                “A Note of Appreciation for [Company Name: ${data.content}]’s Mission”
+    
+            Opening Paragraph:
+                Start with a warm greeting and introduction (e.g., “Dear ${data.label} ${data.name}, as a keen follower of ${data.content}, I felt compelled to reach out.”).
+                Mention how you came across their website or work and why you felt inspired.
+    
+            Body of the Email:
+                Highlight specific aspects of their mission or vision that resonate with you (use details from the input content).
+                Appreciate a unique feature or initiative their organization is driving.
+                Acknowledge the positive impact they are creating in their field or community.
+    
+            Closing Paragraph:
+                Express genuine gratitude for their work and leadership.
+                End with a forward-looking statement or offer, such as hoping to see more of their success or collaborating in some capacity.
+                Include a polite sign-off (e.g., “With admiration and best regards,”).
+    
+            Call-to-Action (Optional): If appropriate, add a soft CTA, like asking for a brief meeting or sharing your thoughts further: here is input:\n${data.content}`;
 
             const result = await model.generateContent(prompt);
 
