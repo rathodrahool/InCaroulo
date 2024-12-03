@@ -35,7 +35,6 @@ import { EmailService } from '@shared/services/mail/mail.service';
 import { THROTTLER_TTL, THROTTLER_LIMIT } from '@shared/constants/constant';
 
 import { DropdownModule } from '@modules/dropdown/dropdown.module';
-import { DashboardModule } from './modules/dashboard/dashboard.module';
 
 @Module({
     imports: [
@@ -74,7 +73,6 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
         SectionModule,
         PermissionModule,
         DropdownModule,
-        DashboardModule,
     ],
     controllers: [],
     providers: [
